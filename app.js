@@ -1,24 +1,32 @@
 window.addEventListener('load', function() {
-    let loadBtn = document.querySelector('#loadTextBtn');
+    let Sbtn = document.querySelector("#searchBtn");
+    let result= this.document.querySelector("#result");
+    let searchField = this.document.querySelector("#searchField");
+    
 
 
-    loadBtn.addEventListener('click', function(event){
+    Sbtn.addEventListener('click', function(event){
         event.preventDefault();
 
-        fetch("superheroes.php")
-        .then(response => {
-            if (response.ok){
+        let searchTxt = searchField.value;
+        searchTxt = searchTxt.trim();
+
+        let safeSrch = encodeURIComponent(searchTxt);
+
+        let url="superheroes.php?query="+safeSrch;
+
+        fetch(url)
+        .then(function(response)  {
                 return response.text();
-            } else {
-                return Promise.reject('Something  went wrong');
-            }
-            
         })
-            .then(data => {
-                alert(data);
+        .then(function(data) {
+                result.innerHTML = data;
             })
             
-            .catch(error => console.log(error));
+            .catch(function (error) {
+             result.innerHTML = "<p> error present <p>"
+             console.log(error);
+            })
 
     });
 
